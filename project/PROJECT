@@ -1,0 +1,16 @@
+domain: sedex.io
+layout:
+- go.kubebuilder.io/v3
+projectName: s3-controller
+repo: github.com/linuxshokunin/s3-controller
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: sedex.io
+  group: s3
+  kind: Bucket
+  path: github.com/linuxshokunin/s3-controller/api/v1alpha1
+  version: v1alpha1
+version: "3"
