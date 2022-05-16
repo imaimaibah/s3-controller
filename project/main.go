@@ -32,8 +32,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	s3v1alpha1 "github.com/linuxshokunin/s3-controller/api/v1alpha1"
-	"github.com/linuxshokunin/s3-controller/controllers"
+	s3v1alpha1 "github.com/imaimaibah/s3-controller/api/v1alpha1"
+	"github.com/imaimaibah/s3-controller/controllers"
 	//+kubebuilder:scaffold:imports
 )
 

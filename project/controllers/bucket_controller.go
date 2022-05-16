@@ -26,12 +26,12 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	s3v1alpha1 "github.com/linuxshokunin/s3-controller/api/v1alpha1"
+	s3v1alpha1 "github.com/imaimaibah/s3-controller/api/v1alpha1"
 
 	"github.com/go-logr/logr"
 	"k8s.io/client-go/tools/record"
 
-	s3 "github.com/linuxshokunin/s3-controller/pkg/s3"
+	s3 "github.com/imaimaibah/s3-controller/pkg/s3"
 )
 
 // BucketReconciler reconciles a Bucket object

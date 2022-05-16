@@ -30,7 +30,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	s3v1alpha1 "github.com/linuxshokunin/s3-controller/api/v1alpha1"
+	s3v1alpha1 "github.com/imaimaibah/s3-controller/api/v1alpha1"
 	//+kubebuilder:scaffold:imports
 )
 
