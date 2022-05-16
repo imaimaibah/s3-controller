@@ -28,5 +28,5 @@ users:
     client-key-data: ${USER_KEY_DATA}
 __EOF__
 
-docker run --rm -it --network kind -v $(pwd)/.kubeconfig:/root/.kube/config -v $(pwd)/project:/go/src/github.com/linuxshokunin/s3-controller kubebuilder:s3-controller
+docker run --rm -it --network kind -v $(pwd)/.kubeconfig:/root/.kube/config -v $(pwd)/project:/go/src/github.com/imaimaibah/s3-controller kubebuilder:s3-controller
 

@@ -38,15 +38,15 @@ spec:
               encryption:
                 description: Enabling encryption
                 format: string
-                type: string
+                type: boolean
               public:
                 description: Enabling public access
                 format: string
-                type: string
+                type: boolean
               versioning:
                 description: Enabling versioning
                 format: string
-                type: string
+                type: boolean
             required:
             - encryption
             - public

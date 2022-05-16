@@ -19,6 +19,7 @@ package controllers
 import (
 	//"fmt"
 	"context"
+	"strconv"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -103,8 +104,8 @@ func (r *BucketReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 
 	//fmt.Printf("%+v\n", bucket)
 	log.Info(bucket.ObjectMeta.Name)
-	log.Info(bucket.Spec.Versioning)
-	log.Info(bucket.Spec.Encrypt)
+	log.Info(strconv.FormatBool(bucket.Spec.Versioning))
+	log.Info(strconv.FormatBool(bucket.Spec.Encrypt))
 
 	objectName := bucket.ObjectMeta.Name
 	versioning := bucket.Spec.Versioning

@@ -4,4 +4,4 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
 RUN curl -L -o kubebuilder https://github.com/kubernetes-sigs/kubebuilder/releases/download/v3.4.0/kubebuilder_linux_amd64 && \
     chmod +x kubebuilder && mv kubebuilder /usr/local/bin/
 ENV GO111MODULE=on
-WORKDIR /go/src/github.com/linuxshokunin/s3-controller
+WORKDIR /go/src/github.com/imaimaibah/s3-controller

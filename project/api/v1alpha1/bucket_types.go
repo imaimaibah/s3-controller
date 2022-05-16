@@ -29,19 +29,19 @@ type BucketSpec struct {
 	// +kubebuilder:validation:Format:=string
 
 	// Enabling versioning
-	Versioning string `json:"versioning"`
+	Versioning bool `json:"versioning"`
 
 	// +kubebuilder:validation:Required
 	// +kubebuilder:validation:Format:=string
 
 	// Enabling encryption
-	Encrypt string `json:"encryption"`
+	Encrypt bool `json:"encryption"`
 
 	// +kubebuilder:validation:Required
 	// +kubebuilder:validation:Format:=string
 
 	// Enabling public access
-	Public string `json:"public"`
+	Public bool `json:"public"`
 }
 
 // BucketStatus defines the observed state of Bucket

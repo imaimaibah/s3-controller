@@ -99,7 +99,7 @@ func Create(name string) error {
 	return nil
 }
 
-func Update(name string, version string, encryption string) error {
+func Update(name string, version bool, encryption bool) error {
 	// Create session
 	sess, err := createSession()
 	if err != nil {
@@ -110,7 +110,7 @@ func Update(name string, version string, encryption string) error {
 
 	// Update Bucket
 	// Versioning
-	if version == "true" {
+	if version {
 		verInput := &s3.PutBucketVersioningInput{
 			Bucket: aws.String(name),
 			VersioningConfiguration: &s3.VersioningConfiguration{
@@ -125,7 +125,7 @@ func Update(name string, version string, encryption string) error {
 	}
 
 	// Encryption
-	if encryption == "true" {
+	if encryption {
 		rule := &s3.ServerSideEncryptionRule{
 			ApplyServerSideEncryptionByDefault: &s3.ServerSideEncryptionByDefault{
 				SSEAlgorithm: aws.String("AES256"),

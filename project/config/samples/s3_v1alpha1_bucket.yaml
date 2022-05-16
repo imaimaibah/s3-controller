@@ -3,7 +3,7 @@ kind: Bucket
 metadata:
   name: sedex-bucket-sample
 spec:
-  versioning: "true"
-  encryption: "true"
-  public: "false"
+  versioning: true
+  encryption: true
+  public: false
 
