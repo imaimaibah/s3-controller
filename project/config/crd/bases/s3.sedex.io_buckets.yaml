@@ -39,7 +39,7 @@ spec:
                 description: Enabling encryption
                 format: string
                 type: boolean
-              public:
+              protected:
                 description: Enabling public access
                 format: string
                 type: boolean
@@ -49,7 +49,7 @@ spec:
                 type: boolean
             required:
             - encryption
-            - public
+            - protected
             - versioning
             type: object
           status:

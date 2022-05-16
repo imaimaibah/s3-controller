@@ -41,7 +41,7 @@ type BucketSpec struct {
 	// +kubebuilder:validation:Format:=string
 
 	// Enabling public access
-	Public bool `json:"public"`
+	Public bool `json:"protected"`
 }
 
 // BucketStatus defines the observed state of Bucket

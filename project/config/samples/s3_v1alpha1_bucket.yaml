@@ -5,5 +5,5 @@ metadata:
 spec:
   versioning: true
   encryption: true
-  public: false
+  protected: false
 
