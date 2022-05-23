@@ -26,21 +26,21 @@ import (
 // BucketSpec defines the desired state of Bucket
 type BucketSpec struct {
 	// +kubebuilder:validation:Required
-	// +kubebuilder:validation:Format:=string
+	// +kubebuilder:validation:Format:=boolean
 
 	// Enabling versioning
 	Versioning bool `json:"versioning"`
 
 	// +kubebuilder:validation:Required
-	// +kubebuilder:validation:Format:=string
+	// +kubebuilder:validation:Format:=boolean
 
 	// Enabling encryption
-	Encrypt bool `json:"encryption"`
+	//Encrypt bool `json:"encryption"`
 
 	// +kubebuilder:validation:Required
-	// +kubebuilder:validation:Format:=string
+	// +kubebuilder:validation:Format:=boolean
 
-	// Enabling public access
+	// Enabling file protection on delete
 	Public bool `json:"protected"`
 }
 

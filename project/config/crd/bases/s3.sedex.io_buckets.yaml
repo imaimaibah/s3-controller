@@ -35,20 +35,15 @@ spec:
           spec:
             description: BucketSpec defines the desired state of Bucket
             properties:
-              encryption:
-                description: Enabling encryption
-                format: string
-                type: boolean
               protected:
                 description: Enabling public access
-                format: string
+                format: boolean
                 type: boolean
               versioning:
                 description: Enabling versioning
-                format: string
+                format: boolean
                 type: boolean
             required:
-            - encryption
             - protected
             - versioning
             type: object
