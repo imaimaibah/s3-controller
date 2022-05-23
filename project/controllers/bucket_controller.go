@@ -110,24 +110,27 @@ func (r *BucketReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	objectName := bucket.ObjectMeta.Name
 	versioning := bucket.Spec.Versioning
 	encryption := bucket.Spec.Encrypt
-	err := s3.Create(objectName)
-	if err != nil {
-		return ctrl.Result{}, nil
-	}
-	err = s3.Update(objectName, versioning, encryption)
-	if err != nil {
-		return ctrl.Result{}, nil
-	}
-	//UpdateStatus()
 
-	//updateBucketStatus()
+	//Initialize s3 struct & create session
+	s := s3.S3{}
+	s.CreateSession()
+	err := s.Create(objectName)
+	if err != nil {
+		return ctrl.Result{}, nil
+	}
+	err = s.Update(objectName, versioning, encryption)
+	if err != nil {
+		return ctrl.Result{}, nil
+	}
 	return ctrl.Result{}, nil
 }
 
 //func (r *BucketReconciler) deleteExternalResources(obj s3v1alpha1.Bucket) error {
 func (r *BucketReconciler) deleteExternalResources(objectName string) error {
+	s := s3.S3{}
+	s.CreateSession()
 	//objectName := obj.ObjectMeta.Name
-	if err := s3.Delete(objectName); err != nil {
+	if err := s.Delete(objectName); err != nil {
 		return err
 	}
 	return nil

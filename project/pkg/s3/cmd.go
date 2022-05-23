@@ -6,18 +6,23 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/aws/aws-sdk-go/service/sts"
 	"io/ioutil"
 	"log"
 	"os"
 )
 
-func createSession() (*session.Session, error) {
+type S3 struct {
+	sess *session.Session
+}
+
+func (s *S3) CreateSession() error {
 	// Session creation
-	sess := session.Must(session.NewSession())
+	s.sess = session.Must(session.NewSession())
 
 	// Create a new STS client to get temporary credentials
-	initStsClient := sts.New(sess)
+	initStsClient := sts.New(s.sess)
 
 	// Getting the SA token
 	awsWebIdentityTokenFile := os.Getenv("AWS_WEB_IDENTITY_TOKEN_FILE")
@@ -27,7 +32,7 @@ func createSession() (*session.Session, error) {
 		awsRoleArn := os.Getenv("AWS_ROLE_ARN")
 		awsWebIdentityToken, err := ioutil.ReadFile(awsWebIdentityTokenFile)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		// Requesting temporary credentials
@@ -39,11 +44,11 @@ func createSession() (*session.Session, error) {
 				DurationSeconds:  aws.Int64(3600),
 			})
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		// Creating a new session with the temporary credentials
-		sess = session.Must(session.NewSession(&aws.Config{
+		s.sess = session.Must(session.NewSession(&aws.Config{
 			Credentials: credentials.NewStaticCredentialsFromCreds(credentials.Value{
 				AccessKeyID:     *identity.Credentials.AccessKeyId,
 				SecretAccessKey: *identity.Credentials.SecretAccessKey,
@@ -54,28 +59,21 @@ func createSession() (*session.Session, error) {
 	}
 
 	// Create a new sts client from IAM role's credentials and print the current identity
-	stsClient := sts.New(sess)
+	stsClient := sts.New(s.sess)
 	identity, err := stsClient.GetCallerIdentity(&sts.GetCallerIdentityInput{})
 	if err != nil {
-		return nil, err
+		return err
 	}
 	jsonIdentity, err := json.MarshalIndent(*identity, "", "  ")
 	log.Printf("%s", string(jsonIdentity))
 
-	return sess, nil
+	return nil
 
 }
 
-func Create(name string) error {
-	// Create session
-	sess, err := createSession()
-	if err != nil {
-		log.Printf("Couldn't create a session")
-		return err
-	}
-
-	// Create a new S3 client and print all buckets
-	s3Client := s3.New(sess)
+func (s *S3) Create(name string) error {
+	// Create a new S3 client
+	s3Client := s3.New(s.sess)
 	obj, err := s3Client.GetObject(&s3.GetObjectInput{
 		Bucket: aws.String(name),
 		Key:    aws.String("//"),
@@ -93,23 +91,16 @@ func Create(name string) error {
 		}
 	}
 
-	//DELETEBELOW
-	jsonBuckets, err := json.MarshalIndent(*obj, "", "  ")
-	log.Printf("%+v", string(jsonBuckets))
 	return nil
 }
 
-func Update(name string, version bool, encryption bool) error {
-	// Create session
-	sess, err := createSession()
-	if err != nil {
-		log.Printf("Couldn't create a session")
-		return err
-	}
-	s3Client := s3.New(sess)
+func (s *S3) Update(name string, version bool, encryption bool) error {
+	// Create a new S3 client
+	s3Client := s3.New(s.sess)
 
 	// Update Bucket
 	// Versioning
+	/*
 	if version {
 		verInput := &s3.PutBucketVersioningInput{
 			Bucket: aws.String(name),
@@ -123,6 +114,7 @@ func Update(name string, version bool, encryption bool) error {
 			return err
 		}
 	}
+	*/
 
 	// Encryption
 	if encryption {
@@ -149,26 +141,43 @@ func Update(name string, version bool, encryption bool) error {
 	return nil
 }
 
-func Delete(name string) error {
-	// Create session
-	sess, err := createSession()
+func (s *S3) Delete(name string) error {
+	s3Client := s3.New(s.sess)
+
+	if obj, err := s3Client.GetObject(&s3.GetObjectInput{
+		Bucket: aws.String(name),
+		Key:    aws.String("//DO_NOT_DELETE"),
+	}); err != nil && obj.Body == nil {
+		// Delete everything in the bucket
+		s.deleteItems(name)
+
+		// Delete bucket
+		if _, err = s3Client.DeleteBucket(&s3.DeleteBucketInput{
+			Bucket: aws.String(name),
+		}); err != nil {
+			return err
+		}
+
+		// Wait until bucket is deleted before finishing
+		if err = s3Client.WaitUntilBucketNotExists(&s3.HeadBucketInput{
+			Bucket: aws.String(name),
+		}); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (s *S3) deleteItems(name string) error {
+	s3Client := s3.New(s.sess)
+
+	iter := s3manager.NewDeleteListIterator(s3Client, &s3.ListObjectsInput{
+		Bucket: aws.String(name),
+	})
+
+	err := s3manager.NewBatchDeleteWithClient(s3Client).Delete(aws.BackgroundContext(), iter)
 	if err != nil {
-		log.Printf("Couldn't create a session")
-		return err
-	}
-	s3Client := s3.New(sess)
-
-	// Delete bucket
-	if _, err = s3Client.DeleteBucket(&s3.DeleteBucketInput{
-		Bucket: aws.String(name),
-	}); err != nil {
-		return err
-	}
-
-	// Wait until bucket is deleted before finishing
-	if err = s3Client.WaitUntilBucketNotExists(&s3.HeadBucketInput{
-		Bucket: aws.String(name),
-	}); err != nil {
 		return err
 	}
 

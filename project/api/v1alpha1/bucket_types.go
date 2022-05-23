@@ -25,23 +25,29 @@ import (
 
 // BucketSpec defines the desired state of Bucket
 type BucketSpec struct {
-	// +kubebuilder:validation:Required
-	// +kubebuilder:validation:Format:=string
+	// +kubebuilder:validation:Format:=boolean
+	// +kubebuilder:validation:Optional
+	// +kubebuilder:default:=false
 
-	// Enabling versioning
+	// Enabling versioning.
+	// Default value is false.
 	Versioning bool `json:"versioning"`
 
-	// +kubebuilder:validation:Required
-	// +kubebuilder:validation:Format:=string
+	// +kubebuilder:validation:Format:=boolean
+	// +kubebuilder:validation:Optional
+	// +kubebuilder:default:=false
 
-	// Enabling encryption
-	Encrypt bool `json:"encryption"`
+	// Enabling encryption.
+	// Default value is false.
+	//Encrypt bool `json:"encryption"`
 
-	// +kubebuilder:validation:Required
-	// +kubebuilder:validation:Format:=string
+	// +kubebuilder:validation:Format:=boolean
+	// +kubebuilder:validation:Optional
+	// +kubebuilder:default:=false
 
-	// Enabling public access
-	Public bool `json:"protected"`
+	// Enabling public access.
+	// Default value is false.
+	Public bool `json:"public"`
 }
 
 // BucketStatus defines the observed state of Bucket
