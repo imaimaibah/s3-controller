@@ -35,17 +35,16 @@ spec:
           spec:
             description: BucketSpec defines the desired state of Bucket
             properties:
-              protected:
-                description: Enabling public access
+              public:
+                default: false
+                description: Enabling public access. Default value is false.
                 format: boolean
                 type: boolean
               versioning:
-                description: Enabling versioning
+                default: false
+                description: Enabling versioning. Default value is false.
                 format: boolean
                 type: boolean
-            required:
-            - protected
-            - versioning
             type: object
           status:
             description: BucketStatus defines the observed state of Bucket
