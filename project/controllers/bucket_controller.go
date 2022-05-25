@@ -113,6 +113,7 @@ func (r *BucketReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 
 	//Initialize s3 struct & create session
 	s := s3.S3{}
+	s.CreateSession()
 	err := s.Create(objectName)
 	if err != nil {
 		return ctrl.Result{}, nil
