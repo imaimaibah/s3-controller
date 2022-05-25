@@ -39,7 +39,7 @@ type BucketSpec struct {
 
 	// Enabling encryption.
 	// Default value is false.
-	//Encrypt bool `json:"encryption"`
+	Encrypt bool `json:"encryption"`
 
 	// +kubebuilder:validation:Format:=boolean
 	// +kubebuilder:validation:Optional
@@ -47,7 +47,7 @@ type BucketSpec struct {
 
 	// Enabling public access.
 	// Default value is false.
-	Public bool `json:"public"`
+	Protected bool `json:"protected,omitempty"`
 }
 
 // BucketStatus defines the observed state of Bucket

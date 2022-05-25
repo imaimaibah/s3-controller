@@ -28,5 +28,11 @@ users:
     client-key-data: ${USER_KEY_DATA}
 __EOF__
 
-docker run --rm -it --network kind -v $(pwd)/.kubeconfig:/root/.kube/config -v $(pwd)/project:/go/src/github.com/imaimaibah/s3-controller kubebuilder:s3-controller
+docker run --rm -it \
+  --network kind \
+  -e AWS_ROLE_ARN=arn:aws:iam::158484697723:role/connect-dev-external-dns,AWS_WEB_IDENTITY_TOKEN_FILE=token,AWS_REGION=eu-west-2 \
+  --workdir /go/src/github.com/imaimaibah/s3-controller \
+  -v $(pwd)/.kubeconfig:/root/.kube/config \
+  -v $(pwd)/project:/go/src/github.com/imaimaibah/s3-controller \
+  kubebuilder:s3-controller
 

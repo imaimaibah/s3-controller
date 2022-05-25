@@ -1,7 +1,6 @@
 package s3
 
 import (
-	"encoding/json"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -58,15 +57,6 @@ func (s *S3) CreateSession() error {
 		}))
 	}
 
-	// Create a new sts client from IAM role's credentials and print the current identity
-	stsClient := sts.New(s.sess)
-	identity, err := stsClient.GetCallerIdentity(&sts.GetCallerIdentityInput{})
-	if err != nil {
-		return err
-	}
-	jsonIdentity, err := json.MarshalIndent(*identity, "", "  ")
-	log.Printf("%s", string(jsonIdentity))
-
 	return nil
 
 }
@@ -87,9 +77,12 @@ func (s *S3) Create(name string) error {
 		})
 		if err != nil {
 			log.Printf("Unable to create bucket %q", name)
+			log.Printf("%v", err)
 			return err
 		}
+		return nil
 	}
+	defer obj.Body.Close()
 
 	return nil
 }
@@ -101,19 +94,19 @@ func (s *S3) Update(name string, version bool, encryption bool) error {
 	// Update Bucket
 	// Versioning
 	/*
-	if version {
-		verInput := &s3.PutBucketVersioningInput{
-			Bucket: aws.String(name),
-			VersioningConfiguration: &s3.VersioningConfiguration{
-				MFADelete: aws.String("Disabled"),
-				Status:    aws.String("Enabled"),
-			},
+		if version {
+			verInput := &s3.PutBucketVersioningInput{
+				Bucket: aws.String(name),
+				VersioningConfiguration: &s3.VersioningConfiguration{
+					MFADelete: aws.String("Disabled"),
+					Status:    aws.String("Enabled"),
+				},
+			}
+			_, err := s3Client.PutBucketVersioning(verInput)
+			if err != nil {
+				return err
+			}
 		}
-		_, err := s3Client.PutBucketVersioning(verInput)
-		if err != nil {
-			return err
-		}
-	}
 	*/
 
 	// Encryption
