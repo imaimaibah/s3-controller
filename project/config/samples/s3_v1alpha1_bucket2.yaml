@@ -1,0 +1,9 @@
+apiVersion: s3.sedex.io/v1alpha1
+kind: Bucket
+metadata:
+  name: sedex-bucket-sample2
+spec:
+  versioning: false
+  encryption: true
+  protected: false
+
