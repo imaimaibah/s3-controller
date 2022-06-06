@@ -1,4 +1,4 @@
-module github.com/imaimaibah/s3-controller v0.0.0
+module github.com/imaimaibah/s3-controller
 
 go 1.17
 
